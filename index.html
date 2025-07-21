@@ -13,7 +13,11 @@
             <label for="startDate" class="block text-sm font-medium text-gray-700">Select a Date:</label>
             <input type="date" id="startDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
         </div>
-        <button onclick="calculatePiVersary()" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Calculate Pi-iversary</button>
+        <div class="flex space-x-2">
+            <button onclick="calculatePiVersary()" class="flex-1 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Calculate Pi-iversary</button>
+            <button onclick="shareLink()" class="flex-1 bg-green-500 text-white p-2 rounded-md hover:bg-green-600">Share Link</button>
+        </div>
+        <div id="banner" class="hidden mt-4 p-2 rounded-md text-center"></div>
         <div id="result" class="mt-4 text-gray-700"></div>
     </div>
 
@@ -72,6 +76,27 @@
             }
 
             resultDiv.innerHTML = output;
+        }
+
+        function shareLink() {
+            const banner = document.getElementById('banner');
+            const url = window.location.href;
+
+            navigator.clipboard.writeText(url).then(() => {
+                banner.className = 'mt-4 p-2 rounded-md text-center bg-green-100 text-green-800';
+                banner.innerText = 'Link copied to clipboard!';
+                banner.classList.remove('hidden');
+                setTimeout(() => {
+                    banner.classList.add('hidden');
+                }, 3000);
+            }).catch(() => {
+                banner.className = 'mt-4 p-2 rounded-md text-center bg-red-100 text-red-800';
+                banner.innerText = 'Failed to copy link. Please copy the URL manually.';
+                banner.classList.remove('hidden');
+                setTimeout(() => {
+                    banner.classList.add('hidden');
+                }, 3000);
+            });
         }
     </script>
 </body>
