@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi-iversary Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-4">Pi-iversary Calculator</h1>
+        <div class="mb-4">
+            <label for="startDate" class="block text-sm font-medium text-gray-700">Select a Date:</label>
+            <input type="date" id="startDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        </div>
+        <button onclick="calculatePiVersary()" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Calculate Pi-iversary</button>
+        <div id="result" class="mt-4 text-gray-700"></div>
+    </div>
+
+    <script>
+        // Load date from query parameters on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const date = urlParams.get('date');
+            if (date) {
+                document.getElementById('startDate').value = date;
+                calculatePiVersary();
+            }
+        };
+
+        function calculatePiVersary() {
+            const startDateInput = document.getElementById('startDate').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!startDateInput) {
+                resultDiv.innerHTML = '<p class="text-red-500">Please select a date.</p>';
+                return;
+            }
+
+            // Update URL with selected date
+            const url = new URL(window.location);
+            url.searchParams.set('date', startDateInput);
+            window.history.replaceState({}, '', url);
+
+            const startDate = new Date(startDateInput);
+            const pi = 3.14;
+            const daysInMonth = 30.4167; // Average days in a month
+            const daysInYear = 365.25; // Average days in a year (accounting for leap years)
+            const maxAnniversaries = 5; // Limit to 5 future anniversaries for brevity
+            let output = '';
+
+            // Calculate future Pi-iversary months (3.14, 6.28, 9.42, etc.)
+            output += '<h2 class="text-lg font-semibold mt-4">Pi-iversary Months</h2>';
+            for (let i = 1; i <= maxAnniversaries; i++) {
+                const months = pi * i;
+                const piMonthsInDays = months * daysInMonth;
+                const piMonthsDate = new Date(startDate.getTime() + piMonthsInDays * 24 * 60 * 60 * 1000);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const piMonthsFormatted = piMonthsDate.toLocaleDateString('en-US', options);
+                output += `<p><strong>${(months).toFixed(2)} Months:</strong> ${piMonthsFormatted}</p>`;
+            }
+
+            // Calculate future Pi-iversary years (3.14, 6.28, 9.42, etc.)
+            output += '<h2 class="text-lg font-semibold mt-4">Pi-iversary Years</h2>';
+            for (let i = 1; i <= maxAnniversaries; i++) {
+                const years = pi * i;
+                const piYearsInDays = years * daysInYear;
+                const piYearsDate = new Date(startDate.getTime() + piYearsInDays * 24 * 60 * 60 * 1000);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const piYearsFormatted = piYearsDate.toLocaleDateString('en-US', options);
+                output += `<p><strong>${(years).toFixed(2)} Years:</strong> ${piYearsFormatted}</p>`;
+            }
+
+            resultDiv.innerHTML = output;
+        }
+    </script>
+</body>
+</html>
